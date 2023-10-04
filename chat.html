@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HAD服务器论坛</title>
+  <style>
+    .post {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>论坛系统（测试中）</h1>
+
+  <!-- 发帖表单 -->
+  <form id="postForm" onsubmit="return submitPost()">
+    <label for="username">玩家名（可以随便写）：</label>
+    <input type="text" id="username" required><br>
+    <label for="content">内容：</label>
+    <textarea id="content" rows="5" required></textarea><br>
+    <input type="submit" value="发帖">
+  </form>
+
+  <!-- 帖子列表 -->
+  <div id="postList"></div>
+
+  <script>
+    // 提交帖子
+    function submitPost() {
+      var username = document.getElementById("username").value;
+      var content = document.getElementById("content").value;
+
+      // 创建帖子元素
+      var postElement = document.createElement("div");
+      postElement.className = "post";
+      var postContent = document.createElement("p");
+      postContent.textContent = "用户名：" + username + " 内容：" + content;
+      postElement.appendChild(postContent);
+
+      // 添加帖子到列表
+      var postList = document.getElementById("postList");
+      postList.appendChild(postElement);
+
+      // 清空表单
+      document.getElementById("postForm").reset();
+
+      return false; // 阻止表单提交
+    }
+  </script>
+</body>
+</html>

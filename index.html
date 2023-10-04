@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>HAD服务器-承载了青春的服务器</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        setInterval(function() {
+          $.ajax({
+            url: "https://api.mcsrvstat.us/2/mchad.icu",  // 替换为你的Minecraft服务器IP和端口
+            method: "GET",
+            success: function(data) {
+              if (data.online) {
+                $("#status").text("在线");
+                $("#player-count").text(data.players.online + " / " + data.players.max);
+              } else {
+                $("#status").text("离线");
+                $("#player-count").text("N/A");
+              }
+            },
+            error: function() {
+              $("#status").text("错误");
+              $("#player-count").text("N/A");
+            }
+          });
+        }, 5000); // 每5秒钟更新一次状态
+      });
+    </script>
+    <style>
+      body {
+        text-align: center;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        margin-top: 50px;
+      }
+      #status, #player-count {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body style="background-image: url('bg1.jpg');">
+    <h1>服务器状态获取</h1>
+    <p id="status">正在加载...</p>
+    <p id="player-count"></p>
+    <h2>服务器公告</h2>
+  <h5>本服务器论坛正处于测试阶段，目前仅支持基础功能，希望能够理解</h5>
+  <h5>服务器QQ官方交流群：674087948</h5>
+  ✡本服务器由fnd网络联合组织打造
+ <a href="image.html">服务器精选图片</a>
+  <a href="https://docs.qq.com/doc/DRmh3b1laalpta1Jz">服务器规章制度</a>
+   <h4> 
+   <a href="chat.html">官方论坛</a>
+  </h4>
+    </body>
+</html>
