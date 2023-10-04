@@ -1,52 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HAD服务器论坛</title>
+  <title>论坛</title>
   <style>
-    .post {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
+    #post-form {
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>论坛系统（测试中）</h1>
+  <h1>论坛</h1>
 
-  <!-- 发帖表单 -->
-  <form id="postForm" onsubmit="return submitPost()">
-    <label for="username">玩家名（可以随便写）：</label>
-    <input type="text" id="username" required><br>
-    <label for="content">内容：</label>
-    <textarea id="content" rows="5" required></textarea><br>
-    <input type="submit" value="发帖">
+  <form id="post-form">
+    <textarea id="post-input" rows="4" cols="50"></textarea><br>
+    <button type="button" onclick="submitPost()">发布</button>
   </form>
 
-  <!-- 帖子列表 -->
-  <div id="postList"></div>
+  <div id="post-list">
+    <!-- 这里将动态生成帖子列表 -->
+  </div>
 
   <script>
-    // 提交帖子
     function submitPost() {
-      var username = document.getElementById("username").value;
-      var content = document.getElementById("content").value;
+      var postInput = document.getElementById("post-input");
+      var post = postInput.value;
 
-      // 创建帖子元素
-      var postElement = document.createElement("div");
-      postElement.className = "post";
-      var postContent = document.createElement("p");
-      postContent.textContent = "用户名：" + username + " 内容：" + content;
-      postElement.appendChild(postContent);
-
-      // 添加帖子到列表
-      var postList = document.getElementById("postList");
-      postList.appendChild(postElement);
-
-      // 清空表单
-      document.getElementById("postForm").reset();
-
-      return false; // 阻止表单提交
+      if (post) {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open("POST", "/submit", true);
+        httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        httpRequest.onreadystatechange = function() {
+          if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+            loadPosts();
+          }
+        };
+        httpRequest.send("post=" + encodeURIComponent(post));
+      }
     }
+
+    function loadPosts() {
+      var postList = document.getElementById("post-list");
+
+      var httpRequest = new XMLHttpRequest();
+      httpRequest.open("GET", "/posts.txt", true);
+      httpRequest.onreadystatechange = function() {
+        if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+          var content = httpRequest.responseText;
+          var posts = content.split('\n');
+          
+          postList.innerHTML = ""; // 清空帖子列表
+
+          for (var i = 0; i < posts.length; i++) {
+            if (posts[i]) {
+              var post = document.createElement("p");
+              post.textContent = posts[i];
+              postList.appendChild(post);
+            }
+          }
+        }
+      };
+      httpRequest.send();
+    }
+
+    // 页面加载时加载已发布的帖子
+    window.addEventListener('load', function() {
+      loadPosts();
+    });
   </script>
 </body>
 </html>
