@@ -8,7 +8,7 @@
       $(document).ready(function() {
         setInterval(function() {
           $.ajax({
-            url: "https://api.mcsrvstat.us/2/mchad.icu:13803",  // 替换为你的Minecraft服务器IP和端口
+            url: "https://api.mcsrvstat.us/2/mchad.icu",  // 替换为你的Minecraft服务器IP和端口
             method: "GET",
             success: function(data) {
               if (data.online) {
